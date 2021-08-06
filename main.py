@@ -2,7 +2,7 @@
 from globals import pygame
 from globals import SCREEN_SIZE
 from globals import GAME_SCALE
-import globals
+# import globals
 
 from Entity.player import Player
 
@@ -23,8 +23,8 @@ vec = pygame.math.Vector2
 
 
 # <>################# Music ##################
-pygame.mixer.music.load("Assets/Music/BaDopp.wav")
-pygame.mixer.music.play(-1)
+# pygame.mixer.music.load("Assets/Music/BaDopp.wav")
+# pygame.mixer.music.play(-1)
 # </>
 
 
@@ -67,14 +67,9 @@ while running:
             running = False
     p.key_input(pygame.key.get_pressed())
 
-    # SCREEN.fill((0, 0, 0))
-
     cam.scroll()
-    w.camera_offset_x = cam.offset.x
-    w.camera_offset_y = cam.offset.y
-
-    p.camera_offset_x = cam.offset.x
-    p.camera_offset_y = cam.offset.y
+    w.camera_update(cam)
+    p.camera_update(cam)
 
     w.draw(SCREEN)
 
@@ -83,19 +78,19 @@ while running:
     p.draw(SCREEN)
 
     # <> Draw debug boxes
-    pygame.draw.circle(
-        SCREEN, (0, 255, 0),
-        globals.HALF_SCREEN, 2)
-    pygame.draw.rect(
-        SCREEN, (255, 0, 0), (
-            p.rect.x - cam.offset.x,
-            p.rect.y - cam.offset.y,
-            p.rect.w, p.rect.h), 1)
-    pygame.draw.rect(
-        SCREEN, (255, 0, 255), (
-            p.collide_box.x - cam.offset.x,
-            p.collide_box.y - cam.offset.y,
-            p.collide_box.w, p.collide_box.h), 1)
+    # pygame.draw.circle(
+    #     SCREEN, (0, 255, 0),
+    #     globals.HALF_SCREEN, 2)
+    # pygame.draw.rect(
+    #     SCREEN, (255, 0, 0), (
+    #         p.rect.x - cam.offset.x,
+    #         p.rect.y - cam.offset.y,
+    #         p.rect.w, p.rect.h), 1)
+    # pygame.draw.rect(
+    #     SCREEN, (255, 0, 255), (
+    #         p.collide_box.x - cam.offset.x,
+    #         p.collide_box.y - cam.offset.y,
+    #         p.collide_box.w, p.collide_box.h), 1)
     # </>
 
     pygame.display.update()

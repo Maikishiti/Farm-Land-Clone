@@ -31,6 +31,10 @@ class World:
         self.camera_offset_x = 0
         self.camera_offset_y = 0
 
+    def camera_update(self, camera):
+        self.camera_offset_x = camera.offset.x
+        self.camera_offset_y = camera.offset.y
+
     def reset(self):
         self.tile_rects = []
         self.tiles = self.load_csv_tiles(

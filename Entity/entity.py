@@ -35,6 +35,10 @@ class Entity(pygame.sprite.Sprite):
         self.accel = (accel_x, accel_y)
         self.position = [x + y for x, y in zip(self.position, self.accel)]
 
+    def camera_update(self, camera):
+        self.camera_offset_x = camera.offset.x
+        self.camera_offset_y = camera.offset.y
+
     def scale_sprite(self, scale):
         self.image = pygame.transform.scale(
             self.image,
