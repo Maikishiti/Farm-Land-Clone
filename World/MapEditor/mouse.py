@@ -3,22 +3,24 @@ import pygame
 
 class Mouse:
     def __init__(self):
-        self.pos = 0, 0
+        self.pos = pygame.math.Vector2()
         self.left = False
         self.right = False
         self.middle = False
         self.scroll_up = False
         self.scroll_down = False
-        self.last_clicked = 0, 0
+        self.last_clicked = pygame.math.Vector2()
 
     def update(self, event=None):
-        self.pos = pygame.mouse.get_pos()
-        self.rel = pygame.mouse.get_rel()
+        self.pos = pygame.math.Vector2(pygame.mouse.get_pos())
+        self.rel = pygame.math.Vector2(pygame.mouse.get_rel())
+
         if event is not None:
             if event.type == pygame.MOUSEBUTTONDOWN:
                 if event.button == 1:
                     self.left = True
-                    self.last_clicked = pygame.mouse.get_pos()
+                    self.last_clicked = pygame.math.Vector2(
+                        pygame.mouse.get_pos())
 
                 if event.button == 2:
                     self.middle = True
