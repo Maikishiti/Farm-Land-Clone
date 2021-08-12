@@ -14,6 +14,7 @@ def gradient(size, color):
 
 class Tab(pygame.Surface):
     def __init__(self, rect, color=(0, 0, 0, 0),
+                 text='',
                  parent=None,
                  children=[],
 
@@ -35,6 +36,7 @@ class Tab(pygame.Surface):
         self.rect = pygame.Rect(rect)
         super().__init__(self.rect.size)
 
+        self.text = text
         self.moving = False
         self.scaling = False
         self.hidden = False
@@ -185,7 +187,11 @@ class Tab(pygame.Surface):
                     if not child.hidden:
                         child.move()
         if not self.hidden:
-            self.move()
+            for child in self.children:
+                for sub_child in child.children:
+                    if not (sub_child.rect.collidepoint(mouse.last_clicked)
+                            or child.rect.collidepoint(mouse.last_clicked)):
+                        self.move()
 
     def draw(self, canvas, pos=None):
         self.rect.topleft = pos if pos is not None else self.rect.topleft
@@ -218,8 +224,15 @@ class Tab(pygame.Surface):
 
         if self.children is not []:
             for child in self.children:
-                if (child.move_bar.collidepoint(mouse.pos) and mouse.left) \
-                        or child.moving:
+                try:
+                    if child.active:
+                        self.moving = False
+                        print("active")
+                except Exception as e:
+                    print("not an DropMenu")
+                    raise e
+                if (child.move_bar.collidepoint(mouse.last_clicked)
+                        and mouse.left) or child.moving:
                     self.moving = False
                     child.moving = True
 
@@ -240,104 +253,6 @@ class Tab(pygame.Surface):
                 self.parent_offset[0] = self.rect.x - self.parent.rect.x
                 self.parent_offset[1] = self.rect.y - self.parent.rect.y
 
-
-class Button(Tab):
-    def __init__(self, rect,
-                 color=(0, 0, 0, 0),
-                 hover_color=(0, 0, 0, 0),
-                 click_color=(0, 0, 0, 0),
-
-                 parent=None,
-                 children=[],
-
-                 move_bar=None,  # Rect
-                 move_bar_color=(0, 0, 0, 0),
-                 move_bar_fill=0,
-
-                 shadow_on=False,
-                 shadow_size=5,
-                 shadow_type="outline",
-                 shadow_color=(0, 0, 0, 0),
-                 shadow_sides={
-                     "Left": True,
-                     "Right": True,
-                     "Top": True,
-                     "Bottom": True
-                 }
-                 ):
-        super().__init__(rect, color, parent, children,
-                         move_bar, move_bar_color, move_bar_fill,
-                         shadow_on, shadow_size, shadow_type,
-                         shadow_color, shadow_sides)
-        self.backup_color = color
-        self.hover_color = hover_color
-        self.click_color = click_color
-
-    def update(self):
-        self.moving = False
-        if self.children is not []:
-            for child in self.children:
-                child.update()
-
-        if not self.hidden:
-            self.hover()
-            if self.clicked():
-                self.color = self.click_color
-
-    def move(self):
-        pass
-
-    def hover(self):
-        self.color = self.hover_color \
-            if self.rect.collidepoint(mouse.pos) \
-            else self.backup_color
-
-    def clicked(self):
-        return (self.rect.collidepoint(mouse.pos) and mouse.left)
-
-
-class DropMenu(Button):
-    def __init__(self, rect,
-                 color=(0, 0, 0, 0),
-                 hover_color=(0, 0, 0, 0),
-                 click_color=(0, 0, 0, 0),
-
-                 parent=None,
-                 children=[],
-
-                 move_bar=None,  # Rect
-                 move_bar_color=(0, 0, 0, 0),
-                 move_bar_fill=0,
-
-                 shadow_on=False,
-                 shadow_size=5,
-                 shadow_type="outline",
-                 shadow_color=(0, 0, 0, 0),
-                 shadow_sides={
-                     "Left": True,
-                     "Right": True,
-                     "Top": True,
-                     "Bottom": True
-                 }
-                 ):
-        super().__init__(rect=rect,
-                         color=color,
-                         hover_color=hover_color,
-                         click_color=click_color,
-                         parent=parent,
-                         children=children,
-                         move_bar=move_bar,
-                         move_bar_color=move_bar_color,
-                         move_bar_fill=move_bar_fill,
-                         shadow_on=shadow_on,
-                         shadow_size=shadow_size,
-                         shadow_type=shadow_type,
-                         shadow_color=shadow_color,
-                         shadow_sides=shadow_sides)
-
-    def clicked(self):
-
-        pass
 
 # <>
 # def movable(self):
