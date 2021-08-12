@@ -33,6 +33,7 @@ class Tab(pygame.Surface):
                      "Bottom": True
     }
     ):
+        rect = (0, 0, rect[0], rect[1]) if len(rect) == 2 else rect
         self.rect = pygame.Rect(rect)
         super().__init__(self.rect.size)
 
@@ -42,6 +43,7 @@ class Tab(pygame.Surface):
         self.hidden = False
         self.debug_boxes = False
         self.color = color
+        self.fixed = False
         # self.old_pos = self.rect.topleft
 
         # <> Inheritance Related
@@ -185,13 +187,15 @@ class Tab(pygame.Surface):
                 child.update()
                 if not self.moving:
                     if not child.hidden:
-                        child.move()
+                        if not child.fixed:
+                            child.move()
         if not self.hidden:
             for child in self.children:
                 for sub_child in child.children:
                     if not (sub_child.rect.collidepoint(mouse.last_clicked)
                             or child.rect.collidepoint(mouse.last_clicked)):
-                        self.move()
+                        if not self.fixed:
+                            self.move()
 
     def draw(self, canvas, pos=None):
         self.rect.topleft = pos if pos is not None else self.rect.topleft
@@ -210,7 +214,7 @@ class Tab(pygame.Surface):
             else:
                 pygame.draw.rect(canvas, self.move_bar_color,
                                  self.move_bar, self.move_bar_fill)
-            for child in self.children:
+            for child in reversed(self.children):
                 child.draw(canvas)
 
     def move(self):

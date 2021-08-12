@@ -27,11 +27,8 @@ class Button(Tab):
                      "Bottom": True
                  }
                  ):
-        if 2 == len(rect):
-            self.rect = (0, 0, rect[0], rect[1])
-        else:
-            self.rect = rect
-        super().__init__(self.rect, color, text, parent, children, move_bar,
+
+        super().__init__(rect, color, text, parent, children, move_bar,
                          move_bar_color, move_bar_fill, shadow_on, shadow_size,
                          shadow_type, shadow_color, shadow_sides)
         self.backup_color = color

@@ -10,6 +10,8 @@ class Mouse:
         self.scroll_up = False
         self.scroll_down = False
         self.last_clicked = pygame.math.Vector2()
+        self.last_clicked.x = -1
+        self.last_clicked.y = -1
 
     def update(self, event=None):
         self.pos = pygame.math.Vector2(pygame.mouse.get_pos())
