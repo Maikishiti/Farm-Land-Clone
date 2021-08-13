@@ -254,8 +254,8 @@ class Tab(pygame.Surface):
         elif self.moving and not mouse.left:
             self.moving = False
 
-        if self.children is not []:
-            for child in self.children:
+        if self.children is not {}:
+            for child in self.children.values():
                 try:
                     if child.active:
                         self.moving = False
@@ -277,8 +277,8 @@ class Tab(pygame.Surface):
             self.rect.y = mouse.pos.y-self.move_bar.h/2-self.move_bar_offset[1]
             self.move_bar.x = self.rect.x + self.move_bar_offset[0]
             self.move_bar.y = self.rect.y + self.move_bar_offset[1]
-            if self.children is not []:
-                for child in self.children:
+            if self.children is not {}:
+                for child in self.children.values():
                     child.rect.x = self.rect.x + child.parent_offset[0]
                     child.rect.y = self.rect.y + child.parent_offset[1]
             if self.parent is not None:
