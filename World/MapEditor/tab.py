@@ -207,6 +207,12 @@ class Tab(pygame.Surface):
             if self.shadow_on:
                 self.draw_shadows(canvas)
             canvas.blit(self, self.rect.topleft)
+            canvas.blit(
+                statics.roboto_mono_medium.render(self.text, 1, (0, 0, 0)),
+                (self.rect.center[0]
+                 - statics.roboto_mono_medium.get_linesize()/2,
+                 self.rect.center[1]
+                 - statics.roboto_mono_medium.get_height()/2))
 
             if self.move_bar_fill == 0:
                 tmp_surface = pygame.Surface(self.move_bar.size)
