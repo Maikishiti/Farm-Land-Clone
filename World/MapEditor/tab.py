@@ -15,7 +15,15 @@ def gradient(size, color):
 
 class Tab(pygame.Surface):
     def __init__(self, rect, color=(0, 0, 0, 0),
+
                  text='',
+                 text_pos=(0, 0),
+                 text_size=10,
+                 text_font=statics.roboto_mono_medium,
+                 text_color=(0, 0, 0),
+                 text_antialias=True,
+                 text_background=None,
+
                  parent=None,
                  children=[],
 
@@ -38,14 +46,22 @@ class Tab(pygame.Surface):
         self.rect = pygame.Rect(rect)
         super().__init__(self.rect.size)
 
-        self.text = text
         self.moving = False
         self.scaling = False
         self.hidden = False
         self.debug_boxes = False
         self.color = color
         self.fixed = False
-        # self.old_pos = self.rect.topleft
+
+        # <> Text Related
+        self.text = text
+        self.text_pos = text_pos
+        self.text_size = text_size
+        self.text_font = text_font
+        self.text_color = text_color
+        self.text_antialias = text_antialias
+        self.text_background = text_background
+        # </>
 
         # <> Inheritance Related
         self.parent = parent
@@ -208,11 +224,12 @@ class Tab(pygame.Surface):
                 self.draw_shadows(canvas)
             canvas.blit(self, self.rect.topleft)
             canvas.blit(
-                statics.roboto_mono_medium.render(self.text, 1, (0, 0, 0)),
-                (self.rect.center[0]
-                 - statics.roboto_mono_medium.get_linesize()/2,
-                 self.rect.center[1]
-                 - statics.roboto_mono_medium.get_height()/2))
+                self.text_font.render(self.text,       self.text_antialias,
+                                      self.text_color, self.text_background),
+                (self.rect.center[0] + self.text_pos[0]
+                 - self.text_font.get_linesize()/2,
+                 self.rect.center[1] + self.text_pos[1]
+                 - self.text_font.get_height()/2))
 
             if self.move_bar_fill == 0:
                 tmp_surface = pygame.Surface(self.move_bar.size)

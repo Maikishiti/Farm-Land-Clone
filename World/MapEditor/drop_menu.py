@@ -1,12 +1,19 @@
 from mouse import mouse
 from button import Button
+from statics import roboto_mono_medium
 
 
 class DropMenu(Button):
-    def __init__(self, rect,
+    def __init__(self, rect, color=(0, 0, 0, 0),
 
-                 color=(0, 0, 0, 0),
                  text='',
+                 text_pos=(0, 0),
+                 text_size=10,
+                 text_font=roboto_mono_medium,
+                 text_color=(0, 0, 0),
+                 text_antialias=True,
+                 text_background=None,
+
                  hover_color=(0, 0, 0, 0),
                  click_color=(0, 0, 0, 0),
 
@@ -26,14 +33,17 @@ class DropMenu(Button):
                      "Right": True,
                      "Top": True,
                      "Bottom": True
-                 }
-                 ):
-        super().__init__(rect=rect, color=color, hover_color=hover_color,
-                         click_color=click_color, text=text, parent=parent,
-                         children=children, move_bar=move_bar,
-                         move_bar_color=move_bar_color,
+    }
+    ):
+        super().__init__(text_color=text_color, text_background=text_background,
+                         click_color=click_color, move_bar_color=move_bar_color,
+                         text=text, text_size=text_size,
+                         hover_color=hover_color, text_antialias=text_antialias,
+                         move_bar=move_bar, text_pos=text_pos,
+                         color=color, parent=parent, children=children,
                          move_bar_fill=move_bar_fill, shadow_on=shadow_on,
-                         shadow_size=shadow_size, shadow_type=shadow_type,
+                         shadow_size=shadow_size, rect=rect,
+                         text_font=text_font, shadow_type=shadow_type,
                          shadow_color=shadow_color, shadow_sides=shadow_sides)
         i = 0
         for button in self.children.values():

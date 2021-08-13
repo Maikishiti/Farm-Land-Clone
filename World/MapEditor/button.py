@@ -1,11 +1,19 @@
 from mouse import mouse
 from tab import Tab
+from statics import roboto_mono_medium
 
 
 class Button(Tab):
-    def __init__(self, rect,
-                 color=(0, 0, 0, 0),
+    def __init__(self, rect, color=(0, 0, 0, 0),
+
                  text='',
+                 text_pos=(0, 0),
+                 text_size=10,
+                 text_font=roboto_mono_medium,
+                 text_color=(0, 0, 0),
+                 text_antialias=True,
+                 text_background=None,
+
                  hover_color=(0, 0, 0, 0),
                  click_color=(0, 0, 0, 0),
 
@@ -25,12 +33,14 @@ class Button(Tab):
                      "Right": True,
                      "Top": True,
                      "Bottom": True
-                 }
-                 ):
+    }
+    ):
 
-        super().__init__(rect, color, text, parent, children, move_bar,
-                         move_bar_color, move_bar_fill, shadow_on, shadow_size,
-                         shadow_type, shadow_color, shadow_sides)
+        super().__init__(rect, color, text, text_pos, text_size, text_font,
+                         text_color, text_antialias, text_background, parent,
+                         children,  move_bar, move_bar_color, move_bar_fill,
+                         shadow_on, shadow_size, shadow_type, shadow_color,
+                         shadow_sides)
         self.backup_color = color
         self.hover_color = hover_color
         self.click_color = click_color
