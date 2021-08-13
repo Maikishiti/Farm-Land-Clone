@@ -223,13 +223,15 @@ class Tab(pygame.Surface):
             if self.shadow_on:
                 self.draw_shadows(canvas)
             canvas.blit(self, self.rect.topleft)
-            canvas.blit(
-                self.text_font.render(self.text,       self.text_antialias,
-                                      self.text_color, self.text_background),
+
+            # Text Bliting
+            canvas.blit(tmp_surface := self.text_font.render(
+                self.text,       self.text_antialias,
+                self.text_color, self.text_background),
                 (self.rect.center[0] + self.text_pos[0]
-                 - self.text_font.get_linesize()/2,
+                 - tmp_surface.get_width()/2,
                  self.rect.center[1] + self.text_pos[1]
-                 - self.text_font.get_height()/2))
+                 - tmp_surface.get_height()/2))
 
             if self.move_bar_fill == 0:
                 tmp_surface = pygame.Surface(self.move_bar.size)

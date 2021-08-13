@@ -27,19 +27,19 @@ tab = DropMenu((140, 10),
                              "Top": False, "Bottom": True},
 
                children={
-    'B1': Button((40, 30), (220, 220, 220), "B1",
+    'B1': Button((40, 30), (220, 220, 220), "Botão1",
                  hover_color=(90, 90, 100),
                  click_color=(250, 250, 255),
                  shadow_on=False, shadow_size=2,
                  shadow_color=(39, 58, 98, 200)),
 
-    'B2': Button((40, 30), (230, 230, 230), "B2",
+    'B2': Button((40, 30), (230, 230, 230), "Botão2",
                  hover_color=(90, 90, 100),
                  click_color=(250, 250, 255),
                  shadow_on=False, shadow_size=2,
                  shadow_color=(39, 58, 98, 200)),
 
-    'B3': Button((40, 30), (240, 240, 240), "B3",
+    'B3': Button((40, 30), (240, 240, 240), "Botão3",
                  hover_color=(90, 90, 100),
                  click_color=(250, 250, 255),
                  shadow_on=False, shadow_size=2,
