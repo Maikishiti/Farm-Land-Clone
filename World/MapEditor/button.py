@@ -37,8 +37,8 @@ class Button(Tab):
 
     def update(self):
         self.moving = False
-        if self.children is not []:
-            for child in self.children:
+        if self.children is not {}:
+            for child in self.children.values():
                 child.update()
 
         if not self.hidden:

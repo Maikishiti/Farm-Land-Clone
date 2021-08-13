@@ -36,7 +36,7 @@ class DropMenu(Button):
                          shadow_size=shadow_size, shadow_type=shadow_type,
                          shadow_color=shadow_color, shadow_sides=shadow_sides)
         i = 0
-        for button in self.children:
+        for button in self.children.values():
             self.button_distance = button.rect.h
             button.rect.y += (self.button_distance * i)
             button.hidden = True
@@ -53,7 +53,7 @@ class DropMenu(Button):
         super().update()
         self.clicked()
         i = 0
-        for button in self.children:
+        for button in self.children.values():
             button.rect.x = self.rect.x
             self.button_distance = button.rect.h
             button.rect.y = self.original_height + self.rect.y \
@@ -62,13 +62,13 @@ class DropMenu(Button):
 
     def clicked(self):
         i = 0
-        for button in self.children:
+        for button in self.children.values():
             if self.rect.collidepoint(mouse.last_clicked) \
                     or (button.rect.collidepoint(mouse.last_clicked)
                         and not button.hidden):
                 button.hidden = False
-                self.rect.w = button.rect.w
-                self.rect.h += button.rect.h * len(self.children)
+                self.rect.h = button.rect.h * len(self.children) \
+                    + self.original_height
                 i += 1
             else:
                 button.hidden = True

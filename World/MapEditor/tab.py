@@ -1,6 +1,7 @@
 import pygame
 from pygame import transform
 from mouse import mouse
+import statics
 
 
 def gradient(size, color):
@@ -48,11 +49,13 @@ class Tab(pygame.Surface):
 
         # <> Inheritance Related
         self.parent = parent
-        self.children = list()
+        self.children = dict()
         for child in children:
-            self.children.append(child)
+            children[child].parent = self
+            self.children[child] = children[child]
+
         if parent is not None:
-            self.parent.children.append(self)
+            self.parent.children[f'tab{statics.num_of_tabs}'] = self
             self.parent_offset = list()
             self.parent_offset.append(self.rect.x)
             self.parent_offset.append(self.rect.y)
@@ -77,44 +80,44 @@ class Tab(pygame.Surface):
         # <> shadow Related
         self.shadow_on = shadow_on
         self.shadow_on = False if shadow_color[3] == 255 else self.shadow_on
-        if shadow_on:
-            self.shadow_size = shadow_size
-            self.shadow_type = shadow_type
-            # Gradient Type can be:
-            #     outline
-            #     opaque_outline
-            #     drop_shadow (not enabled)
-            #     opaque_drop_shadow (not enabled)
-            self.shadow_alpha = shadow_color[3]
-            self.shadow_color = shadow_color
-            self.shadow_sides = shadow_sides
+        self.shadow_size = shadow_size
+        self.shadow_type = shadow_type
+        # Gradient Type can be:
+        #     outline
+        #     opaque_outline
+        #     drop_shadow (not enabled)
+        #     opaque_drop_shadow (not enabled)
+        self.shadow_alpha = shadow_color[3]
+        self.shadow_color = shadow_color
+        self.shadow_sides = shadow_sides
 
-            self.base_gradient = \
-                gradient((1, 255-self.shadow_alpha), self.shadow_color)
-            self.half_gradient = \
-                gradient((1, 255-self.shadow_alpha), (
-                         self.shadow_color[0],
-                         self.shadow_color[1],
-                         self.shadow_color[2],
-                         self.shadow_color[3] + (255 - self.shadow_color[3])/2))
-            self.horizontal_gradient = \
-                transform.scale(self.base_gradient, (
-                    self.rect.w, self.shadow_size))
-            self.vertical_gradient = \
-                transform.scale(self.base_gradient, (
-                    self.rect.h, self.shadow_size))
+        self.base_gradient = \
+            gradient((1, 255-self.shadow_alpha), self.shadow_color)
+        self.half_gradient = \
+            gradient((1, 255-self.shadow_alpha), (
+                self.shadow_color[0],
+                self.shadow_color[1],
+                self.shadow_color[2],
+                self.shadow_color[3] + (255 - self.shadow_color[3])/2))
+        self.horizontal_gradient = \
+            transform.scale(self.base_gradient, (
+                self.rect.w, self.shadow_size))
+        self.vertical_gradient = \
+            transform.scale(self.base_gradient, (
+                self.rect.h, self.shadow_size))
+        self.corner_gradient = \
+            transform.scale(self.half_gradient, (
+                int(self.shadow_size*.6), int(self.shadow_size*.6))) \
+            if shadow_size > 3 \
+            else transform.scale(self.half_gradient, (2, 2))
+        if shadow_size == 2 or shadow_size == 1:
             self.corner_gradient = \
-                transform.scale(self.half_gradient, (
-                    int(self.shadow_size*.6), int(self.shadow_size*.6))) \
-                if shadow_size > 3 \
-                else transform.scale(self.half_gradient, (2, 2))
-            if shadow_size == 2 or shadow_size == 1:
-                self.corner_gradient = \
-                    transform.scale(self.half_gradient, (1, 1))
+                transform.scale(self.half_gradient, (1, 1))
 
             # </>
 
         self.fill(color)
+        statics.num_of_tabs += 1
 
     def draw_shadows(self, canvas):
         vertical = horizontal = corner = c_size = size = 0
@@ -183,15 +186,15 @@ class Tab(pygame.Surface):
 
     def update(self):
         if self.children is not []:
-            for child in self.children:
+            for child in self.children.values():
                 child.update()
                 if not self.moving:
                     if not child.hidden:
                         if not child.fixed:
                             child.move()
         if not self.hidden:
-            for child in self.children:
-                for sub_child in child.children:
+            for child in self.children.values():
+                for sub_child in child.children.values():
                     if not (sub_child.rect.collidepoint(mouse.last_clicked)
                             or child.rect.collidepoint(mouse.last_clicked)):
                         if not self.fixed:
@@ -214,7 +217,7 @@ class Tab(pygame.Surface):
             else:
                 pygame.draw.rect(canvas, self.move_bar_color,
                                  self.move_bar, self.move_bar_fill)
-            for child in reversed(self.children):
+            for child in reversed(self.children.values()):
                 child.draw(canvas)
 
     def move(self):
